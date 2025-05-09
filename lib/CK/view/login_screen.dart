@@ -17,9 +17,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final _passwordController = TextEditingController();
   final _emailController = TextEditingController();
   bool _isLogin = true;
-  String? _selectedRole = 'user'; // Mặc định là user
+  String? _selectedRole = 'user';
   final Repository _repo = Repository();
-  final String _adminPassword = 'admin123'; // Mật khẩu quản trị để chọn Admin
+  final String _adminPassword = 'admin123';
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
@@ -42,7 +42,6 @@ class _LoginScreenState extends State<LoginScreen> {
             );
           }
         } else {
-          // Xác thực mật khẩu quản trị khi chọn vai trò Admin
           if (_selectedRole == 'admin' &&
               _passwordController.text != _adminPassword) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -58,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
             email: _emailController.text,
             createdAt: DateTime.now(),
             lastActive: DateTime.now(),
-            role: _selectedRole!, // Sử dụng vai trò được chọn
+            role: _selectedRole!,
           );
           await _repo.createUser(user);
           Navigator.pushReplacement(
@@ -78,6 +77,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('LoginScreen built');
     return Scaffold(
       appBar: AppBar(title: Text(_isLogin ? 'Login' : 'Register')),
       body: Padding(

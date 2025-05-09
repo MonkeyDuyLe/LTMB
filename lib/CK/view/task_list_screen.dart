@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:test_project/CK/model/task.dart';
 import 'package:test_project/CK/model/user.dart';
 import 'package:test_project/CK/db/reposotory.dart';
 import 'package:test_project/CK/view/task_detail_screen.dart';
 import 'package:test_project/CK/view/task_form_screen.dart';
+import 'package:test_project/CK/view/login_screen.dart';
 
 class TaskListScreen extends StatefulWidget {
   final User currentUser;
@@ -20,10 +22,36 @@ class _TaskListScreenState extends State<TaskListScreen> {
   int? _priorityFilter;
   String? _categoryFilter;
 
+  void _logout() async {
+    print('Logout button pressed');
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.clear();
+      print('SharedPreferences cleared');
+    } catch (e) {
+      print('Error clearing SharedPreferences: $e');
+    }
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+          (route) => false,
+    );
+    print('Navigated to LoginScreen');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Tasks')),
+      appBar: AppBar(
+        title: const Text('Tasks'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: _logout,
+            tooltip: 'Đăng xuất',
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Padding(
